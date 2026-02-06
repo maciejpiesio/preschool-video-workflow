@@ -9,10 +9,22 @@ Video processing workflow script that adds fade effects to videos and uploads th
 ## Usage
 
 ```bash
-./video_fade.sh <input_video> [output_video]
+video-fade [OPTIONS] <input_video> [output_video]
+
+Options:
+  -t, --title TITLE      Set YouTube video title
+  --delete-source        Delete source file after processing
+  --delete-output        Delete output file after uploading
+  -h, --help             Show help
 ```
 
-Output defaults to `<input>_faded.<ext>` if not specified.
+Output defaults to `<input><OUTPUT_SUFFIX>.<ext>` if not specified.
+
+## Installation
+
+```bash
+make install PREFIX=$HOME/.local
+```
 
 ## Dependencies
 
@@ -23,18 +35,23 @@ Output defaults to `<input>_faded.<ext>` if not specified.
 
 ## Configuration
 
-Edit the configuration section at the top of `video_fade.sh`:
+Config file location: `~/.config/video-fade/config`
 
-- **YouTube**: Set `YOUTUBE_CLIENT_SECRETS` path (get from Google Cloud Console)
-- **Nextcloud**: Set `NEXTCLOUD_URL`, `NEXTCLOUD_USER`, `NEXTCLOUD_PASS`
-- **Fade timing**: `FADE_IN_DURATION` (default 2s), `FADE_OUT_DURATION` (default 5s)
+Copy `config.example` to get started. Key settings:
+- `OUTPUT_SUFFIX`: Appended to input filename (default: `_faded`)
+- `FADE_IN_DURATION` / `FADE_OUT_DURATION`: Fade timing in seconds
+- `YOUTUBE_*`: YouTube API credentials and upload settings
+- `NEXTCLOUD_*`: Nextcloud WebDAV credentials and folder
 
 ## Video Processing Pipeline
 
-1. Validates input file exists
-2. Gets video duration via ffprobe
-3. Applies fade-in/out effects (video and audio) via ffmpeg
-4. Encodes with libx264 (CRF 23) and AAC audio (192k)
-5. Uploads to YouTube (unlisted, category 22 - People & Blogs)
-6. Uploads to Nextcloud via WebDAV and creates public share link
-7. Outputs summary with URLs
+1. Loads config from `~/.config/video-fade/config` if present
+2. Parses command-line flags and validates (blocks `--delete-source` + `--delete-output` combo)
+3. Gets video duration via ffprobe
+4. Applies fade-in/out effects (video and audio) via ffmpeg
+5. Encodes with libx264 (CRF 23) and AAC audio (192k)
+6. Optionally deletes source file (`--delete-source`)
+7. Uploads to YouTube with custom or auto-generated title
+8. Uploads to Nextcloud via WebDAV and creates public share link
+9. Optionally deletes output file (`--delete-output`)
+10. Outputs summary with URLs

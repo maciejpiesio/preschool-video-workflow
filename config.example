@@ -1,0 +1,25 @@
+# Video Fade Configuration
+# Copy this file to ~/.config/video-fade/config
+
+# ==================== OUTPUT SETTINGS ====================
+# Suffix appended to input filename when output is not specified
+# e.g., "input.mp4" becomes "input_faded.mp4"
+OUTPUT_SUFFIX="_faded"
+
+# ==================== FADE SETTINGS ====================
+FADE_IN_DURATION=2      # seconds
+FADE_OUT_DURATION=5     # seconds
+
+# ==================== YOUTUBE SETTINGS ====================
+YOUTUBE_ENABLED=true
+YOUTUBE_CLIENT_SECRETS="$HOME/.config/youtube-upload/client_secrets.json"
+YOUTUBE_CREDENTIALS="$HOME/.config/youtube-upload/credentials.json"
+YOUTUBE_PRIVACY="unlisted"  # public, unlisted, or private
+YOUTUBE_CATEGORY="22"       # 22 = People & Blogs
+
+# ==================== NEXTCLOUD SETTINGS ====================
+NEXTCLOUD_ENABLED=true
+NEXTCLOUD_URL="https://your-nextcloud-server.com"
+NEXTCLOUD_USER="your_username"
+NEXTCLOUD_PASS="your_app_password"  # Use app password, not main password
+NEXTCLOUD_FOLDER="/Videos"
